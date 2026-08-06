@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Game Kuis Komposisi Fungsi XI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:linear-gradient(135deg,#eaf4ff,#f8eaff);min-height:100vh;color:#172554}.wrap{max-width:780px;margin:auto;padding:18px}.card{background:#fff;border-radius:24px;padding:24px;margin-top:18px;box-shadow:0 10px 30px #0002}h1,h2{text-align:center}.sub,.small{text-align:center;color:#64748b}input{width:100%;padding:14px;margin:7px 0 14px;border:2px solid #dbe4f0;border-radius:12px;font-size:16px}button{border:0;border-radius:12px;padding:13px 18px;font-size:16px;font-weight:bold;cursor:pointer}.main{background:#2563eb;color:#fff;width:100%}.options button{display:block;width:100%;margin:10px 0;text-align:left;background:#fff;border:2px solid #dbe4f0}.correct{background:#dcfce7!important;border-color:#22c55e!important}.wrong{background:#fee2e2!important;border-color:#ef4444!important}.badges{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.badge{background:#eef2ff;padding:9px 12px;border-radius:12px;font-weight:bold}.progress{height:12px;background:#e5e7eb;border-radius:20px;margin:16px 0;overflow:hidden}.bar{height:100%;background:#2563eb;width:0;transition:.3s}.q{font-size:20px;font-weight:bold;line-height:1.5;margin:20px 0}.level{text-align:center;color:#7c3aed;font-weight:bold}.feedback{text-align:center;font-weight:bold;min-height:25px;margin:12px}.hidden{display:none}table{width:100%;border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px;text-align:center}
+</style></head><body><div class="wrap">
+
+<div id="login" class="card"><h1>🎮 Petualangan Komposisi Fungsi</h1><p class="sub">Game Ulangan Harian Matematika Kelas XI • Kurikulum Merdeka</p>
+<label><b>Nama siswa</b></label><input id="nama" placeholder="Masukkan nama lengkap">
+<label><b>Kelas</b></label><input id="kelas" placeholder="Contoh: XI IPA 1">
+<button class="main" onclick="mulai()">🚀 MULAI GAME</button><p class="small">15 soal • Level 1–3 • 3 nyawa ❤️ • skor otomatis</p></div>
+
+<div id="game" class="card hidden"><div class="badges">
+<div class="badge">👤 <span id="nm"></span></div><div class="badge">❤️ <span id="nyawa"></span></div><div class="badge">⭐ <span id="skor">0</span></div><div class="badge">📚 <span id="nomor">1</span>/15</div></div>
+<div class="progress"><div id="bar" class="bar"></div></div><div id="level" class="level"></div><div id="soal" class="q"></div><div id="opsi" class="options"></div><div id="feedback" class="feedback"></div>
+<button id="next" class="main hidden" onclick="next()">➡️ SOAL BERIKUTNYA</button></div>
+
+<div id="hasil" class="card hidden"><h1>🏆 GAME SELESAI!</h1><h2 id="namaAkhir"></h2><p>Skor akhir</p><h1 id="skorAkhir"></h1><p id="pesan"></p>
+<table><tr><th>Benar</th><th>Salah</th><th>Nyawa</th></tr><tr><td id="benar"></td><td id="salah"></td><td id="nyawaAkhir"></td></tr></table><br><button class="main" onclick="location.reload()">🔄 MAIN LAGI</button></div>
+</div>
+
+<script>
+const Q=[
+["1","Diketahui f(x)=2x+3 dan g(x)=x−1. Nilai (f ∘ g)(2) adalah …",["3","5","7","9"],1],
+["1","Jika f(x)=x+4 dan g(x)=3x, maka (f ∘ g)(2)= …",["6","8","10","12"],2],
+["1","Diketahui f(x)=x−2 dan g(x)=x². Bentuk (g ∘ f)(x) adalah …",["x²−2","(x−2)²","x²+4","x−2"],1],
+["1","Jika f(x)=2x−1 dan g(x)=x+5, maka (f ∘ g)(x)= …",["2x+4","2x+9","2x−6","x+9"],1],
+["1","Diketahui f(x)=x²+1 dan g(x)=x−3. Nilai (f ∘ g)(4) adalah …",["1","2","3","4"],1],
+["2","f(x)=3x−2 dan g(x)=2x+1. Bentuk (f ∘ g)(x) adalah …",["6x−1","6x+1","5x−1","5x+3"],0],
+["2","f(x)=x²−4 dan g(x)=x+2. Nilai (f ∘ g)(3) adalah …",["21","25","29","31"],2],
+["2","Diketahui f(x)=2x+1 dan (f ∘ g)(x)=4x−3. Rumus g(x) adalah …",["2x−2","2x−1","2x+1","4x−4"],1],
+["2","f(x)=x−5 dan g(x)=3x+2. Bentuk (g ∘ f)(x) adalah …",["3x−13","3x−7","3x+7","3x−3"],0],
+["2","Diketahui f(x)=x+2 dan g(x)=x²−1. Nilai (g ∘ f)(2) adalah …",["9","11","15","16"],2],
+["3","f(x)=2x+3 dan g(x)=x²−1. Bentuk (f ∘ g)(x) adalah …",["2x²+1","2x²+3","2x²−1","x²+1"],0],
+["3","f(x)=x²−2x dan g(x)=x+3. Nilai (f ∘ g)(2) adalah …",["10","12","15","16"],2],
+["3","Jika f(x)=3x−4 dan g(x)=2x+5, tentukan (g ∘ f)(x).",["6x−3","6x−5","6x+1","5x−3"],0],
+["3","Diketahui f(x)=x−1 dan g(x)=x²+2x. Nilai (f ∘ g)(3) adalah …",["11","13","15","17"],1],
+["3","Jika f(x)=2x−3 dan g(x)=x²+1, nilai (g ∘ f)(3) adalah …",["1","2","10","13"],1]
+];
+let i=0,score=0,lives=3,benar=0,salah=0,answered=false,nama="";
+const E=x=>document.getElementById(x);
+function mulai(){nama=E("nama").value.trim();if(!nama){alert("Masukkan nama siswa.");return}E("nm").textContent=nama;E("login").classList.add("hidden");E("game").classList.remove("hidden");tampil()}
+function tampil(){answered=false;let x=Q[i];E("nomor").textContent=i+1;E("level").textContent="LEVEL "+x[0]+" "+("⭐".repeat(+x[0]));E("soal").textContent=x[1];E("skor").textContent=score;E("nyawa").textContent="❤️".repeat(lives)+"🖤".repeat(3-lives);E("bar").style.width=(i/15*100)+"%";E("feedback").textContent="";E("next").classList.add("hidden");E("opsi").innerHTML="";x[2].forEach((v,k)=>{let b=document.createElement("button");b.textContent=String.fromCharCode(65+k)+". "+v;b.onclick=()=>jawab(k,b);E("opsi").appendChild(b)})}
+function jawab(k,b){if(answered)return;answered=true;let x=Q[i];[...E("opsi").children].forEach((z,n)=>{if(n===x[3])z.classList.add("correct");if(n===k&&k!==x[3])z.classList.add("wrong")});if(k===x[3]){let p=x[0]==1?100:x[0]==2?150:200;score+=p;benar++;E("feedback").textContent="✅ BENAR! +"+p+" poin"}else{lives--;salah++;E("feedback").textContent="❌ Kurang tepat. Jawaban: "+String.fromCharCode(65+x[3])+". "+x[2][x[3]]}E("skor").textContent=score;E("nyawa").textContent="❤️".repeat(lives)+"🖤".repeat(3-lives);E("next").classList.remove("hidden")}
+function next(){i++;if(lives<=0||i>=15){selesai();return}tampil()}
+function selesai(){E("game").classList.add("hidden");E("hasil").classList.remove("hidden");E("namaAkhir").textContent=nama;E("skorAkhir").textContent=score;E("benar").textContent=benar;E("salah").textContent=salah;E("nyawaAkhir").textContent=lives+" ❤️";E("pesan").textContent=score>=240?"🌟 Hebat!":score>=160?"👍 Bagus, lebih teliti lagi.":"💪 Semangat! Pelajari lagi urutan f ∘ g dan g ∘ f."}
+</script></body></html>
