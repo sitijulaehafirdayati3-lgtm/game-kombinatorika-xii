@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Petualangan Eksponen - Kelas X</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:linear-gradient(135deg,#eef2ff,#fdf2f8);min-height:100vh;color:#172554}.wrap{max-width:800px;margin:auto;padding:20px}.card{background:white;border-radius:24px;padding:25px;box-shadow:0 10px 30px #0002;margin-top:20px}h1,h2{text-align:center}.sub{text-align:center;color:#475569}label{font-weight:bold;display:block;margin-top:12px}input{width:100%;padding:13px;border:2px solid #dbeafe;border-radius:12px;font-size:16px;margin-top:6px}button{border:0;border-radius:13px;padding:13px 20px;font-size:16px;font-weight:bold;cursor:pointer}.main{background:#4f46e5;color:white}.center{text-align:center}.hidden{display:none}.badges{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}.badge{background:#eef2ff;border-radius:14px;padding:10px 14px;font-weight:bold}.progress{height:12px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin:15px 0}.bar{height:100%;width:0;background:#4f46e5;transition:.3s}.level{text-align:center;font-weight:bold}.question{font-size:21px;font-weight:bold;line-height:1.5;margin:20px 0}.option{display:block;width:100%;padding:14px;margin:10px 0;border:2px solid #e2e8f0;background:white;text-align:left;border-radius:14px}.correct{background:#dcfce7!important;border-color:#22c55e!important}.wrong{background:#fee2e2!important;border-color:#ef4444!important}.feedback{text-align:center;font-weight:bold;min-height:28px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:9px;text-align:center}th{background:#eef2ff}.small{font-size:13px;color:#64748b}
+</style></head><body><div class="wrap">
+
+<div id="login" class="card"><h1>🚀 Petualangan Eksponen</h1><p class="sub">Game Matematika Kelas X • Kurikulum Merdeka</p>
+<label>Nama Siswa</label><input id="nama" placeholder="Masukkan nama lengkap"><label>Kelas</label><input id="kelas" placeholder="Contoh: X IPA 1">
+<div class="center"><button class="main" onclick="mulai()">🎮 MULAI GAME</button><p class="small">15 soal • 3 level • 3 nyawa ❤️ • skor otomatis</p></div></div>
+
+<div id="game" class="card hidden"><div class="badges"><div class="badge">👤 <span id="nm"></span></div><div class="badge">❤️ <span id="nyawa">3</span></div><div class="badge">⭐ <span id="skor">0</span></div></div>
+<div class="progress"><div id="bar" class="bar"></div></div><div id="level" class="level"></div><div id="nomor" class="small center"></div><div id="question" class="question"></div><div id="options"></div><div id="feedback" class="feedback"></div>
+<button id="next" class="main hidden" onclick="nextQ()">➡️ SOAL BERIKUTNYA</button></div>
+
+<div id="hasil" class="card hidden"><h1>🏆 GAME SELESAI!</h1><h2 id="namaAkhir"></h2><p class="center">Skor akhir: <b id="skorAkhir"></b></p><p class="center" id="pesan"></p>
+<table><tr><th>Benar</th><th>Salah</th><th>Nyawa</th><th>Persentase</th></tr><tr><td id="benar"></td><td id="salah"></td><td id="nyawaAkhir"></td><td id="persen"></td></tr></table>
+<div class="center"><button class="main" onclick="location.reload()">🔄 MAIN LAGI</button></div></div></div>
+
+<script>
+const q=[
+["1","Hasil dari 2³ adalah ...",["6","8","9","12"],1,"2³ = 8."],
+["1","Hasil dari 5² adalah ...",["10","15","20","25"],3,"5² = 25."],
+["1","Nilai dari 10⁰ adalah ...",["0","1","10","100"],1,"Bilangan bukan nol berpangkat 0 bernilai 1."],
+["1","Bentuk perkalian dari 3⁴ adalah ...",["3+3+3+3","3×3×3×3","4×4×4","3×4"],1,"Pangkat menunjukkan perkalian berulang."],
+["1","Hasil dari 2⁴ × 2² adalah ...",["2⁶","2⁸","4⁶","4⁸"],0,"Basis sama, pangkat dijumlahkan."],
+["2","Hasil dari 3⁵ ÷ 3² adalah ...",["3²","3³","3⁷","3¹⁰"],1,"Basis sama, pangkat dikurangkan."],
+["2","Hasil dari (2³)² adalah ...",["2⁵","2⁶","2⁸","4⁶"],1,"Pangkat dipangkatkan: 3×2 = 6."],
+["2","Sederhanakan 5² × 5³.",["5⁵","5⁶","10⁵","25⁶"],0,"2+3 = 5."],
+["2","Nilai dari 4⁻¹ adalah ...",["4","−4","1/4","−1/4"],2,"a⁻¹ = 1/a."],
+["2","Jika 2ˣ = 32, maka x = ...",["3","4","5","6"],2,"32 = 2⁵."],
+["3","Sederhanakan (x³)(x⁴).",["x⁷","x¹²","2x⁷","x"],0,"x³⁺⁴ = x⁷."],
+["3","Sederhanakan a⁵/a², a≠0.",["a³","a⁷","a¹⁰","a²"],0,"a⁵⁻² = a³."],
+["3","Nilai dari 27^(2/3) adalah ...",["3","6","9","18"],2,"27^(1/3)=3, lalu 3²=9."],
+["3","Jika 3ˣ⁺¹ = 81, maka x = ...",["2","3","4","5"],1,"81=3⁴, jadi x=3."],
+["3","Bentuk sederhana (2x²)³ adalah ...",["6x⁵","8x⁶","8x⁵","6x⁶"],1,"2³(x²)³ = 8x⁶."]
+];
+let i=0,score=0,lives=3,benar=0,salah=0,lock=false;
+function mulai(){let n=nama.value.trim(),k=kelas.value.trim();if(!n||!k)return alert("Nama dan kelas harus diisi.");nm.textContent=n;login.classList.add("hidden");game.classList.remove("hidden");show();}
+function show(){lock=false;let s=q[i];level.textContent="⭐ LEVEL "+s[0];nomor.textContent=`Soal ${i+1} dari ${q.length}`;question.textContent=s[1];bar.style.width=i/q.length*100+"%";feedback.textContent="";next.classList.add("hidden");options.innerHTML="";s[2].forEach((x,j)=>{let b=document.createElement("button");b.className="option";b.textContent=String.fromCharCode(65+j)+". "+x;b.onclick=()=>answer(j,b);options.appendChild(b)})}
+function answer(j,b){if(lock)return;lock=true;let s=q[i],a=document.querySelectorAll(".option");a.forEach(x=>x.disabled=true);if(j==s[3]){score+=10*s[0];benar++;b.classList.add("correct");feedback.textContent="✅ BENAR! "+s[4]}else{lives--;salah++;b.classList.add("wrong");a[s[3]].classList.add("correct");feedback.textContent="❌ Belum tepat. "+s[4]}skor.textContent=score;nyawa.textContent=lives;next.classList.remove("hidden")}
+function nextQ(){if(lives<=0||i==q.length-1)return finish();i++;show()}
+function finish(){game.classList.add("hidden");hasil.classList.remove("hidden");namaAkhir.textContent=nm.textContent;skorAkhir.textContent=score;benar.textContent=benar;salah.textContent=salah;nyawaAkhir.textContent=lives;persen.textContent=Math.round(benar/q.length*100)+"%";pesan.textContent=benar>=13?"🌟 Luar biasa!":benar>=10?"👏 Bagus!":benar>=7?"💪 Terus berlatih!":"📚 Pelajari kembali sifat-sifat eksponen dan coba lagi."}
+</script></body></html>
